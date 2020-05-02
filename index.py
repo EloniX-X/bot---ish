@@ -135,4 +135,4 @@ async def gifs(ctx):
 
 
 
-bot.run('NzA1Nzc2Mjg2ODYxMjMwMTAw.XqxsAA.-TosRm9uQqjc_TN37-D-8ZFaVjE')
+bot.run(':P')
