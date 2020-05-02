@@ -1,7 +1,10 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
+from itertools import cycle
 
 bot = commands.Bot(command_prefix='$')
+status = cycle(['becoming a cheese cultist', 'destroying humans', 'DAMMIT JONNY SHUT THE FONT DOR'])
+
 
 @bot.event
 async def on_ready():
@@ -9,18 +12,46 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    change_status.start()
+ #   await bot.change_presence(status=discord.Status.idle, activity=discord.Game('eating bananas'))
+
 
 @bot.command()
-async def add(ctx, a: int, b: int):
+async def add(ctx, a: float, b: float):
     await ctx.send(a+b)
 
+@tasks.loop(seconds=3)
+async def change_status():
+    await bot.change_presence(activity=discord.Game(next(status)))
+
+
 @bot.command()
-async def multiply(ctx, a: int, b: int):
+async def kick(ctx, member : discord.Member, *, reason=None):
+    await member.kick(reason=reason)
+
+@bot.command()
+async def ban(ctx, member : discord.Member, *, reason=None):
+    await member.ban(reason=reason)
+
+@bot.command()
+async def multiply(ctx, a: float, b: float):
     await ctx.send(a*b)
+
+@bot.command()
+async def divide(ctx, a: float, b: float):
+    await ctx.send(a/b)
 
 @bot.command()
 async def greet(ctx):
     await ctx.send(":smiley: :wave: Hello, there!")
+
+@bot.command()
+async def cutie(ctx):
+    await ctx.send(":hot_face: you are all sexy!")
+
+@bot.command()
+async def life(ctx):
+    await ctx.send("we are all just sex fruit")
 
 @bot.command()
 async def cat(ctx):
@@ -47,6 +78,14 @@ async def why(ctx):
     await ctx.send("https://media.giphy.com/media/gd09Y2Ptu7gsiPVUrv/giphy.gif")
 
 @bot.command()
+async def subtract(ctx, a: float, b: float):
+    await ctx.send(a-b)
+
+@bot.command()
+async def volume(ctx, a: float, b: float, c: float, d: float):
+    await ctx.send(a*b*c*d)
+
+@bot.command()
 async def info(ctx):
     embed = discord.Embed(title="nice bot", description="Nicest bot there is ever.", color=0xeee657)
 
@@ -67,11 +106,13 @@ bot.remove_command('help')
 async def help(ctx):
     embed = discord.Embed(title="Eloni exept bot", description="Eloni is a god and he made this bot thes commands:", color=0xeee657)
 
+    embed.add_field(name="$subtract # - #", value="Gives subtraction of **X** and **Y**", inline=False)
     embed.add_field(name="$add # + #", value="Gives the addition of **X** and **Y**", inline=False)
     embed.add_field(name="$multiply # * #", value="Gives the multiplication of **X** and **Y**", inline=False)
     embed.add_field(name="$greet", value="Gives a nice greet message", inline=False)
-    embed.add_field(name="$info", value="Gives a little info about the bot", inline=False)
+    embed.add_field(name="$gifs", value="a gif library", inline=False)
     embed.add_field(name="$help", value="Gives this message", inline=False)
+    embed.add_field(name="$divide", value="devides # by #", inline=False)
     await ctx.send(embed=embed)
 
 @bot.command()
@@ -94,6 +135,4 @@ async def gifs(ctx):
 
 
 
-
-
-bot.run('NzA1Nzc2Mjg2ODYxMjMwMTAw.XqxdWg.NadYdqx84tXJnqHf-3B7WjRbCiI')
+bot.run('NzA1Nzc2Mjg2ODYxMjMwMTAw.XqxsAA.-TosRm9uQqjc_TN37-D-8ZFaVjE')
